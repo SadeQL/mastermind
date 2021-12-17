@@ -1,54 +1,52 @@
-# mastermind starts here
-
-
-import numpy as np
-
+from math import nan
 import random
 
-from numpy.lib.shape_base import split
-
 arr = ["red", "blue", "yellow", "green", "purple", "orange", "pink", "maroon"]
-secret_code = random.choices(arr, k=4)
-
-guess = [input("Give 4 colors: ")]
-
-first_try = []
-
-#def returnMatches(lst1,lst2):
-       #return list(set(lst1) & set(lst2))
-       
-def Intersection(lst1, lst2):
-    return list(set(lst1).intersection(lst2))
+#secret_code = random.sample(arr, k=4)
+#guess = input("Give 4 colors: ")
+#first_try = guess.split(', ')
 
 
-
-def check_turn(turn):
-    for elem in guess:
-       elem.split(', ')
-    return turn.append(elem.split(', '))
-
-
-check_turn(first_try)
-
-set1 = set(secret_code)
-set2 = set(first_try)
-
-set3 = set1 & set2
-list3 = list(set3)
+def user_color():
+    guess = input("Give 4 colors: ")
+    first_try = guess.split(', ')
+    return first_try
 
 
+user_color()
 
 
-print(secret_code)
-print(first_try)
-#print(list(set(secret_code) & set(first_try)))
-#print(secret_code.intersection(first_try))
-print(list3)
-
-#def check_color():
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
 
 
+def check_list(first_try, secret_code):
+    matches = intersection(first_try, secret_code)
+    bad_order = len(matches)
+    good_color_count = 0
+    if matches != []:
+        for i in range(0, len(first_try)):
+            if first_try[i] == secret_code[i]:
+                good_color_count += 1
+                bad_order -= 1
+    else:
+        good_color_count = 0
+        bad_order = 0
+    return good_color_count, bad_order
 
 
+def play_turn():
+    secret_code = random.sample(arr, k=4)
+    first_try = user_color()
+    i = 1
+    while i < 10:
+        i += 1
+        if check_list(first_try, secret_code) == (4, 4):
+            break
+        else:
+            user_color()
+    return first_try
 
 
+print(check_list(first_try, secret_code))
